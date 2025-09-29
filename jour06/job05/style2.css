@@ -1,0 +1,27 @@
+body {
+    background-color: #ffeedd;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: #222;
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffccaa;
+    border: 2px solid #ff9900;
+    border-radius: 12px;
+}
+
+h1 {
+    text-align: center;
+    color: #cc3300;
+    text-shadow: 1px 1px 2px #fff;
+}
+
+select, button {
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #cc3300;
+}
