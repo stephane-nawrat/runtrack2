@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire GET - Pair/Impair</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Formulaire : Nombre pair ou impair</h1>
+
+    <p class="instruction">
+        Entrez un nombre dans le champ ci-dessous.<br>
+        Le formulaire utilise la méthode GET.
+    </p>
+
+    <form method="GET" action="pair-impaire.php">
+        <div class="champ">
+            <label for="nombre">Nombre :</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Entrez un nombre">
+        </div>
+
+        <button type="submit">Valider</button>
+    </form>
+</div>
+
+</body>
+</html>
