@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de test GET</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Testez le compteur d'arguments GET</h1>
+        
+        <p class="instruction">
+            Remplissez un ou plusieurs champs ci-dessous.<br>
+            Seuls les champs remplis seront comptés.
+        </p>
+        
+        <form method="GET" action="compteur.php" id="monFormulaire">
+            
+            <div class="champ">
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" placeholder="Votre prénom">
+            </div>
+            
+            <div class="champ">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" placeholder="Votre nom">
+            </div>
+            
+            <div class="champ">
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" placeholder="Votre ville">
+            </div>
+            
+            <div class="champ">
+                <label for="age">Âge :</label>
+                <input type="text" id="age" name="age" placeholder="Votre âge">
+            </div>
+            
+            <div class="champ">
+                <label for="email">Email :</label>
+                <input type="text" id="email" name="email" placeholder="votre@email.com">
+            </div>
+            
+            <button type="submit">Envoyer et compter</button>
+        </form>
+        
+        <div class="info">
+            <h3>💡 Astuce</h3>
+            <p>Essayez de remplir seulement 2 ou 3 champs pour voir comment le compteur réagit !</p>
+        </div>
+    </div>
+    
+    <!-- Script JavaScript pour retirer les champs vides avant l'envoi -->
+    <script>
+        // Quand le formulaire est soumis
+        document.getElementById('monFormulaire').addEventListener('submit', function(e) {
+            // Récupérer tous les champs input
+            var inputs = this.querySelectorAll('input[type="text"]');
+            
+            // Parcourir chaque champ
+            inputs.forEach(function(input) {
+                // Si le champ est vide, retirer son attribut "name"
+                // (un champ sans "name" n'est pas envoyé)
+                if (input.value.trim() === '') {
+                    input.removeAttribute('name');
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

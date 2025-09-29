@@ -1,0 +1,186 @@
+/*
+========================================
+FICHIER 3 : style.css - Version minimaliste
+========================================
+Design sobre et épuré, sans fioritures.
+========================================
+*/
+
+
+/* ====================================
+   BASE
+   ==================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    padding: 40px 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border: 1px solid #ddd;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.instruction {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+
+/* ====================================
+   FORMULAIRE
+   ==================================== */
+
+.champ {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #333;
+}
+
+button[type="submit"],
+.bouton-retour {
+    padding: 10px 20px;
+    background: #333;
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button[type="submit"]:hover,
+.bouton-retour:hover {
+    background: #555;
+}
+
+
+/* ====================================
+   RÉSULTATS
+   ==================================== */
+
+.resultat {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+.resultat.succes {
+    background: #f0f0f0;
+}
+
+.resultat.erreur {
+    background: #fff8e1;
+}
+
+.resultat h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.nombre-grand {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+
+/* ====================================
+   DÉTAILS
+   ==================================== */
+
+.detail {
+    padding: 20px;
+    margin-bottom: 20px;
+    background: #fafafa;
+    border-left: 3px solid #333;
+}
+
+.detail h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.detail ul {
+    list-style: none;
+}
+
+.detail li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.nom-champ {
+    font-weight: bold;
+}
+
+
+/* ====================================
+   INFORMATIONS
+   ==================================== */
+
+.info,
+.explication {
+    padding: 20px;
+    margin-top: 20px;
+    background: #fafafa;
+    border-left: 3px solid #999;
+}
+
+.info h3,
+.explication h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.info p,
+.explication p {
+    font-size: 14px;
+}
+
+
+/* ====================================
+   ACTIONS
+   ==================================== */
+
+.actions {
+    margin-top: 20px;
+}
