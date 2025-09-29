@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Maison - Job 07</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Formulaire : Dessiner une maison</h1>
+
+    <p class="instruction">
+        Entrez la largeur et la hauteur de la maison.<br>
+        L’algorithme affichera une maison ASCII.
+    </p>
+
+    <form method="POST" action="maison.php">
+        <div class="champ">
+            <label for="largeur">Largeur :</label>
+            <input type="text" id="largeur" name="largeur" placeholder="Ex : 10">
+        </div>
+
+        <div class="champ">
+            <label for="hauteur">Hauteur :</label>
+            <input type="text" id="hauteur" name="hauteur" placeholder="Ex : 5">
+        </div>
+
+        <button type="submit">Dessiner la maison</button>
+    </form>
+</div>
+
+</body>
+</html>
