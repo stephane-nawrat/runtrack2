@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire _GET (Tableau)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Remplissez le formulaire</h1>
+        
+        <p class="instruction">
+            Testez l’envoi des champs et observez leur affichage dans un tableau HTML.<br>
+            Chaque champ rempli apparaîtra avec son nom et sa valeur.
+        </p>
+        
+        <form method="GET" action="tableau.php">
+            
+            <div class="champ">
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" placeholder="Votre prénom">
+            </div>
+            
+            <div class="champ">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" placeholder="Votre nom">
+            </div>
+            
+            <div class="champ">
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" placeholder="Votre ville">
+            </div>
+            
+            <div class="champ">
+                <label for="age">Âge :</label>
+                <input type="text" id="age" name="age" placeholder="Votre âge">
+            </div>
+            
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+    
+</body>
+</html>
