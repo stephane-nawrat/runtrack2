@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de connexion - Job 05</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Formulaire de connexion</h1>
+
+    <p class="instruction">
+        Entrez votre nom d’utilisateur et mot de passe.<br>
+        Seuls les champs remplis seront traités.
+    </p>
+
+    <form method="POST" action="login.php" id="loginForm">
+        <div class="champ">
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" id="username" name="username" placeholder="Votre nom d'utilisateur">
+        </div>
+
+        <div class="champ">
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="password" placeholder="Votre mot de passe">
+        </div>
+
+        <button type="submit">Se connecter</button>
+    </form>
+</div>
+
+</body>
+</html>

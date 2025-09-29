@@ -1,0 +1,162 @@
+/* ====================================
+   BASE
+   ==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    padding: 40px 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    background: white;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+
+.instruction {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ====================================
+   FORMULAIRE
+   ==================================== */
+.champ {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #333;
+}
+
+button[type="submit"],
+.bouton-retour {
+    padding: 10px 20px;
+    background: #333;
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover,
+.bouton-retour:hover {
+    background: #555;
+    transform: translateY(-2px);
+}
+
+/* ====================================
+   RESULTATS
+   ==================================== */
+.resultat {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.resultat.succes {
+    background: #e6ffed;       /* vert clair */
+    border-color: #8cd18c;
+    color: #256029;
+    font-weight: bold;
+}
+
+.resultat.erreur {
+    background: #fff1f0;       /* rouge clair */
+    border-color: #f5c6cb;
+    color: #a71d2a;
+    font-weight: bold;
+}
+
+/* ====================================
+   TABLEAUX
+   ==================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #f0f0f0;
+    font-weight: normal;
+}
+
+/* ====================================
+   EXPLICATIONS / INFO
+   ==================================== */
+.container[style] {
+    padding: 25px;
+    border-left: 3px solid #333;
+    background: #f9f9f9;
+}
+
+.actions {
+    margin-top: 20px;
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+@media (max-width: 640px) {
+    body {
+        padding: 20px 10px;
+    }
+    
+    .container {
+        padding: 25px;
+    }
+
+    button[type="submit"],
+    .bouton-retour {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -1,3 +1,12 @@
+<!--  jour04/job04
+Développer un algorithme qui aﬃche dans un tableau HTML <table> l’ensemble des
+arguments $_ POST et les valeurs associées. Il doit y avoir deux colonnes : argument et
+valeur.
+Pour tester votre code, créez un formulaire html <form> de type POST avec différents
+champs <input> de type “text” et un <input> de type“submit” pour l’envoi.
+Vous pouvez ensuite aﬃcher avec echo directement dans un tableau.
+-->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
