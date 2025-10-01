@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Transformateur de texte</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Transformateur de texte</h1>
+
+    <!-- Formulaire qui envoie vers transform.php -->
+    <form action="transform.php" method="post">
+        <!-- Champ texte -->
+        <label for="str">Votre texte :</label>
+        <input type="text" id="str" name="str" required>
+
+        <!-- Liste déroulante des transformations -->
+        <label for="fonction">Choisissez une transformation :</label>
+        <select id="fonction" name="fonction" required>
+            <option value="gras">Mettre en gras les mots qui commencent par une majuscule</option>
+            <option value="cesar">Appliquer le code César (décalage de 2)</option>
+            <option value="plateforme">Ajouter "_" aux mots finissant par "me"</option>
+        </select>
+
+        <!-- Bouton d'envoi -->
+        <button type="submit">Appliquer</button>
+    </form>
+</body>
+</html>
