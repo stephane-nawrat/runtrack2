@@ -1,142 +1,125 @@
 <?php
-// transform.php
-// Objectif : appliquer des transformations (gras / césar / plateforme) sur un texte envoyé par formulaire.
-// Fichier pédagogique : gère UTF-8, échappement et affichage sécurisé.
+// ============================================
+// Transformateur de texte (version pédagogique)
+// ============================================
 
-// s'assurer que PHP gère correctement UTF-8
-mb_internal_encoding('UTF-8');
-mb_regex_encoding('UTF-8');
+// On récupère les données du formulaire envoyées en POST
+$texte = $_POST['str'] ?? "";           // le texte de l'utilisateur
+$choix = $_POST['fonction'] ?? "";      // la transformation choisie
 
-// Récupération sécurisée des données POST
-$userTexte = $_POST['str'] ?? '';
-$choixFonction = $_POST['fonction'] ?? '';
-
-// petit helper d'échappement (UTF-8)
-function escape($s) {
-    return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+// Petite fonction pour sécuriser l'affichage du texte (évite les failles XSS)
+function securiser($texte) {
+    return htmlspecialchars($texte, ENT_QUOTES, 'UTF-8');
 }
 
-/* -----------------------------
-   Fonction GRAS (pédagogique)
-   - Met en <b>...</b> les mots commençant par une majuscule (Unicode aware)
-   - Échappe le texte utilisateur pour éviter l'injection, puis autorise <b>
-------------------------------*/
-function gras($texte) {
-    // on préserve les espaces en splittant en tokens (mots ET séparateurs)
-    $tokens = preg_split('/(\s+)/u', $texte, -1, PREG_SPLIT_DELIM_CAPTURE);
-    foreach ($tokens as $i => $token) {
-        // laisser les séparateurs (espaces) inchangés
-        if (preg_match('/^\s+$/u', $token)) continue;
+// ---------------------------
+// 1. Fonction "gras"
+// Met en gras (<b>) les mots qui commencent par une majuscule
+// ---------------------------
+function mettreEnGras($texte) {
+    // On coupe le texte en mots séparés par des espaces
+    $mots = explode(" ", $texte);
 
-        // tester si le premier caractère est une majuscule Unicode
-        if (preg_match('/^\p{Lu}/u', $token)) {
-            // échapper le mot puis l'entourer de <b>
-            $tokens[$i] = '<b>' . escape($token) . '</b>';
+    // On parcourt chaque mot
+    foreach ($mots as $index => $mot) {
+        // Vérifie si le premier caractère est une majuscule
+        if (ctype_upper(substr($mot, 0, 1))) {
+            $mots[$index] = "<b>" . securiser($mot) . "</b>";
         } else {
-            $tokens[$i] = escape($token);
-        }
-    }
-    return implode('', $tokens);
-}
-
-/* -----------------------------
-   Fonction CÉSAR (pédagogique)
-   - Décale les lettres A-Z / a-z (ASCII) de $decalage
-   - Laisse les caractères non ASCII (accents, signes) inchangés
-   - Retourne chaîne échappée
-------------------------------*/
-function cesar($texte, $decalage = 2) {
-    $result = '';
-    $len = mb_strlen($texte, 'UTF-8');
-
-    for ($i = 0; $i < $len; $i++) {
-        $ch = mb_substr($texte, $i, 1, 'UTF-8');
-
-        // n'opère que sur l'alphabet ASCII (A-Z/a-z) — les lettres accentuées restent telles quelles
-        if (preg_match('/[A-Z]/', $ch)) {
-            $code = ord($ch); // safe car match ASCII
-            $nouveau = 65 + (($code - 65 + $decalage) % 26);
-            $result .= chr($nouveau);
-        } elseif (preg_match('/[a-z]/', $ch)) {
-            $code = ord($ch);
-            $nouveau = 97 + (($code - 97 + $decalage) % 26);
-            $result .= chr($nouveau);
-        } else {
-            // caractère non-ASCII ou non lettre : on le recopie tel quel
-            $result .= $ch;
+            $mots[$index] = securiser($mot);
         }
     }
 
-    // échappement final : pas de HTML attendu ici
-    return escape($result);
+    // On reconstruit le texte avec des espaces
+    return implode(" ", $mots);
 }
 
-/* -----------------------------
-   Fonction PLATEFORME (pédagogique)
-   - Ajoute un "_" aux mots finissant par "me"
-   - Sensible à l'orthographe exacte "me" (on peut adapter pour majuscules)
-------------------------------*/
+// ---------------------------
+// 2. Fonction "césar"
+// Décale chaque lettre de 2 dans l'alphabet
+// Exemple : A → C, B → D, z → b
+// ---------------------------
+function codeCesar($texte) {
+    $resultat = "";
+
+    // On parcourt chaque caractère un par un
+    for ($i = 0; $i < strlen($texte); $i++) {
+        $caractere = $texte[$i];
+
+        // Si c'est une lettre minuscule
+        if ($caractere >= 'a' && $caractere <= 'z') {
+            $resultat .= chr(((ord($caractere) - 97 + 2) % 26) + 97);
+        }
+        // Si c'est une lettre majuscule
+        elseif ($caractere >= 'A' && $caractere <= 'Z') {
+            $resultat .= chr(((ord($caractere) - 65 + 2) % 26) + 65);
+        }
+        // Sinon, on garde tel quel (espace, chiffre, accent…)
+        else {
+            $resultat .= $caractere;
+        }
+    }
+
+    return securiser($resultat);
+}
+
+// ---------------------------
+// 3. Fonction "plateforme"
+// Ajoute "_" aux mots qui finissent par "me"
+// Exemple : programme → programme_
+// ---------------------------
 function plateforme($texte) {
-    // tokens pour préserver espaces/punctuation
-    $tokens = preg_split('/(\s+)/u', $texte, -1, PREG_SPLIT_DELIM_CAPTURE);
-    foreach ($tokens as $i => $token) {
-        if (preg_match('/^\s+$/u', $token)) continue;
+    $mots = explode(" ", $texte);
 
-        // on teste la version en minuscules (UTF-8)
-        $lower = mb_strtolower($token, 'UTF-8');
-        // \b peut être approximatif pour Unicode ; on teste la terminaison "me"
-        if (mb_substr($lower, -2, 2, 'UTF-8') === 'me') {
-            $tokens[$i] = escape($token) . '_';
+    foreach ($mots as $index => $mot) {
+        if (substr($mot, -2) === "me") {
+            $mots[$index] = securiser($mot) . "_";
         } else {
-            $tokens[$i] = escape($token);
+            $mots[$index] = securiser($mot);
         }
     }
-    return implode('', $tokens);
+
+    return implode(" ", $mots);
 }
 
-/* -----------------------------
-   Application selon le choix
-------------------------------*/
-$resultat = '';
-if ($userTexte !== '' && $choixFonction !== '') {
-    switch ($choixFonction) {
-        case 'gras':
-            $resultat = gras($userTexte);          // contient potentiellement <b> (autorisé)
-            break;
-        case 'cesar':
-            $resultat = cesar($userTexte);         // échappé
-            break;
-        case 'plateforme':
-            $resultat = plateforme($userTexte);    // échappé (avec _ ajouté)
-            break;
-        default:
-            $resultat = escape('Transformation inconnue.');
-            break;
-    }
+// ---------------------------
+// Application du choix
+// ---------------------------
+$resultat = "";
+
+if ($choix === "gras") {
+    $resultat = mettreEnGras($texte);
+} elseif ($choix === "cesar") {
+    $resultat = codeCesar($texte);
+} elseif ($choix === "plateforme") {
+    $resultat = plateforme($texte);
 } else {
-    $resultat = '';
+    $resultat = "Aucune transformation appliquée.";
 }
-
 ?>
+
+<!-- ===================== -->
+<!-- Partie HTML du rendu -->
+<!-- ===================== -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <title>Résultat</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="container">
     <h1>Résultat de la transformation</h1>
 
-    <p>Texte original : <i><?= htmlspecialchars($userTexte, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></i></p>
-    <p>Transformation choisie : <b><?= htmlspecialchars($choixFonction, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></b></p>
+    <p><strong>Texte original :</strong> <i><?= securiser($texte) ?></i></p>
+    <p><strong>Transformation choisie :</strong> <?= securiser($choix) ?></p>
 
     <div class="resultat">
-        <!-- $resultat contient des <b> explicitement autorisés par la fonction gras ;
-             les autres contenus utilisateur ont été échappés -->
         <?= $resultat ?>
     </div>
 
     <p><a href="formulaire.html">⟵ Revenir au formulaire</a></p>
+</div>
 </body>
 </html>

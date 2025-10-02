@@ -6,24 +6,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Transformateur de texte</h1>
+    <div class="container">
+        <h1>Transformateur de texte</h1>
+        <p class="instruction">Entrez un texte puis choisissez une transformation :</p>
 
-    <!-- Formulaire qui envoie vers transform.php -->
-    <form action="transform.php" method="post">
-        <!-- Champ texte -->
-        <label for="str">Votre texte :</label>
-        <input type="text" id="str" name="str" required>
+        <!-- Formulaire -->
+        <form action="transform.php" method="post" id="formTransform">
+            <div class="champ">
+                <label for="str">Votre texte :</label>
+                <input type="text" id="str" name="str" placeholder="Ex : Bonjour la plateforme" required>
+            </div>
 
-        <!-- Liste déroulante des transformations -->
-        <label for="fonction">Choisissez une transformation :</label>
-        <select id="fonction" name="fonction" required>
-            <option value="gras">Mettre en gras les mots qui commencent par une majuscule</option>
-            <option value="cesar">Appliquer le code César (décalage de 2)</option>
-            <option value="plateforme">Ajouter "_" aux mots finissant par "me"</option>
-        </select>
+            <div class="champ">
+                <label for="fonction">Choisissez une transformation :</label>
+                <select id="fonction" name="fonction" required>
+                    <option value="gras">Mettre en gras les mots qui commencent par une majuscule</option>
+                    <option value="cesar">Appliquer le code César (décalage de 2)</option>
+                    <option value="plateforme">Ajouter "_" aux mots finissant par "me"</option>
+                </select>
+            </div>
 
-        <!-- Bouton d'envoi -->
-        <button type="submit">Appliquer</button>
-    </form>
+            <button type="submit">Appliquer</button>
+        </form>
+    </div>
 </body>
 </html>
