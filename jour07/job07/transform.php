@@ -1,6 +1,6 @@
 <?php
 // ============================================
-// Transformateur de texte (version pédagogique)
+// Transformateur de texte 
 // ============================================
 
 // On récupère les données du formulaire envoyées en POST
