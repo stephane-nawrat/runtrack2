@@ -3,49 +3,50 @@
 // FICHIER : connexion.php
 // ===========================
 // Rôle : Permet à un utilisateur de se connecter
-// Connexion à la BDD via le fichier db.php
-// Gestion des sessions pour garder l'utilisateur connecté
+// Redirige vers admin.php si l'utilisateur est 'admin'
+// Redirige vers profil.php sinon
 // ===========================
 
-session_start(); // Démarrage de la session
-
+session_start(); // Démarrage de la session pour stocker les infos utilisateur
 require_once __DIR__ . '/config/includes/db.php'; // Connexion PDO
 
 $errors = [];
-$success = "";
 
 // Vérification de la soumission du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = trim($_POST['login']);
     $password = $_POST['password'];
 
-    // === Contrôles de validation basiques ===
+    // Contrôles basiques
     if (empty($login) || empty($password)) {
         $errors[] = "Veuillez remplir tous les champs.";
-    } else {
-        // Récupérer l'utilisateur correspondant au login
+    }
+
+    if (empty($errors)) {
+        // Vérification du login dans la base
         $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = :login");
         $stmt->execute([':login' => $login]);
         $user = $stmt->fetch();
 
-        if ($user) {
-            // Vérifier le mot de passe
-            if (password_verify($password, $user['password'])) {
-                // Connexion réussie : stocker les informations en session
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_login'] = $user['login'];
-                $_SESSION['user_prenom'] = $user['prenom'];
-                $_SESSION['user_nom'] = $user['nom'];
+        if ($user && password_verify($password, $user['password'])) {
+            // Stockage des informations en session
+            $_SESSION['user'] = [
+                'id' => $user['id'],
+                'login' => $user['login'],
+                'prenom' => $user['prenom'],
+                'nom' => $user['nom']
+            ];
 
-                $success = "Connexion réussie ! Bienvenue, " . htmlspecialchars($user['prenom']) . ".";
-                // Redirection possible vers profil.php ou page d'accueil
-                header('Location: profil.php');
+            // Redirection selon le rôle
+            if ($user['login'] === 'admin') {
+                header('Location: admin.php');
                 exit;
             } else {
-                $errors[] = "Mot de passe incorrect.";
+                header('Location: profil.php');
+                exit;
             }
         } else {
-            $errors[] = "Utilisateur non trouvé.";
+            $errors[] = "Login ou mot de passe incorrect.";
         }
     }
 }
@@ -63,17 +64,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h1>Connexion</h1>
 
-    <!-- Affichage des messages -->
+    <!-- Affichage des messages d'erreur -->
     <?php if ($errors): ?>
         <ul style="color:red;">
             <?php foreach ($errors as $error): ?>
                 <li><?= htmlspecialchars($error) ?></li>
             <?php endforeach; ?>
         </ul>
-    <?php endif; ?>
-
-    <?php if ($success): ?>
-        <p style="color:green;"><?= htmlspecialchars($success) ?></p>
     <?php endif; ?>
 
     <!-- Formulaire de connexion -->
@@ -83,8 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">Se connecter</button>
     </form>
 
-    <p><a href="inscription.php">Créer un compte</a></p>
-    <p><a href="index.php">Retour à l'accueil</a></p>
+    <p>
+        <a href="inscription.php">Créer un compte</a> |
+        <a href="index.php">Retour à l'accueil</a>
+    </p>
+
 </body>
 
 </html>
