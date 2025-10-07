@@ -3,33 +3,29 @@
 // FICHIER : connexion.php
 // ===========================
 // Rôle : Permet à un utilisateur de se connecter
-// Redirige vers admin.php si l'utilisateur est 'admin'
-// Redirige vers profil.php sinon
+// Redirige vers admin.php si login = admin, sinon vers profil.php
 // ===========================
 
-session_start(); // Démarrage de la session pour stocker les infos utilisateur
-require_once __DIR__ . '/config/includes/db.php'; // Connexion PDO
+session_start();
+require_once __DIR__ . '/config/includes/db.php';
+
 
 $errors = [];
 
-// Vérification de la soumission du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = trim($_POST['login']);
     $password = $_POST['password'];
 
-    // Contrôles basiques
     if (empty($login) || empty($password)) {
-        $errors[] = "Veuillez remplir tous les champs.";
-    }
-
-    if (empty($errors)) {
-        // Vérification du login dans la base
+        $errors[] = "Tous les champs sont obligatoires.";
+    } else {
+        // Vérifier l'utilisateur en base
         $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = :login");
         $stmt->execute([':login' => $login]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
-            // Stockage des informations en session
+            // Stocker les infos de l'utilisateur dans la session
             $_SESSION['user'] = [
                 'id' => $user['id'],
                 'login' => $user['login'],
@@ -40,11 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Redirection selon le rôle
             if ($user['login'] === 'admin') {
                 header('Location: admin.php');
-                exit;
             } else {
                 header('Location: profil.php');
-                exit;
             }
+            exit;
         } else {
             $errors[] = "Login ou mot de passe incorrect.";
         }
@@ -61,10 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-
     <h1>Connexion</h1>
 
-    <!-- Affichage des messages d'erreur -->
     <?php if ($errors): ?>
         <ul style="color:red;">
             <?php foreach ($errors as $error): ?>
@@ -73,18 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </ul>
     <?php endif; ?>
 
-    <!-- Formulaire de connexion -->
     <form method="post" action="">
         <label>Login : <input type="text" name="login" required></label><br>
         <label>Mot de passe : <input type="password" name="password" required></label><br>
         <button type="submit">Se connecter</button>
     </form>
 
-    <p>
-        <a href="inscription.php">Créer un compte</a> |
-        <a href="index.php">Retour à l'accueil</a>
-    </p>
-
+    <p><a href="inscription.php">Créer un compte</a></p>
+    <p><a href="index.php">Retour à l'accueil</a></p>
 </body>
 
 </html>

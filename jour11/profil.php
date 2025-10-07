@@ -2,48 +2,37 @@
 // ===========================
 // FICHIER : profil.php
 // ===========================
-// Rôle : Permet à un utilisateur connecté de modifier son profil
-// Connexion à la BDD via PDO et gestion des sessions
+// Rôle : Permet à un utilisateur de voir et modifier son profil
 // ===========================
 
 session_start();
 require_once __DIR__ . '/config/includes/db.php';
-// Connexion PDO
 
-// === Vérifier si l'utilisateur est connecté ===
-if (!isset($_SESSION['user_id'])) {
+
+// Vérifier que l'utilisateur est connecté
+if (!isset($_SESSION['user'])) {
     header('Location: connexion.php');
     exit;
 }
 
-// === Récupérer les infos de l'utilisateur ===
-$user_id = $_SESSION['user_id'];
-
-$stmt = $pdo->prepare("SELECT login, prenom, nom FROM utilisateurs WHERE id = :id");
-$stmt->execute([':id' => $user_id]);
-$user = $stmt->fetch();
-
-if (!$user) {
-    die("Utilisateur introuvable !");
-}
-
+$user = $_SESSION['user']; // infos depuis la session
 $errors = [];
 $success = "";
 
-// === Traitement du formulaire ===
+// Traitement du formulaire de modification
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = trim($_POST['login']);
     $prenom = trim($_POST['prenom']);
     $nom = trim($_POST['nom']);
 
-    // Vérifications simples
     if (empty($login) || empty($prenom) || empty($nom)) {
         $errors[] = "Tous les champs sont obligatoires.";
     }
 
     if (empty($errors)) {
+        // Mise à jour dans la base
         $stmt = $pdo->prepare("
-            UPDATE utilisateurs
+            UPDATE utilisateurs 
             SET login = :login, prenom = :prenom, nom = :nom
             WHERE id = :id
         ");
@@ -51,13 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':login' => $login,
             ':prenom' => $prenom,
             ':nom' => $nom,
-            ':id' => $user_id
+            ':id' => $user['id']
         ]);
+
+        // Mettre à jour la session
+        $_SESSION['user']['login'] = $login;
+        $_SESSION['user']['prenom'] = $prenom;
+        $_SESSION['user']['nom'] = $nom;
+
         $success = "Profil mis à jour avec succès !";
-        // Mettre à jour les infos pour réafficher le formulaire
-        $user['login'] = $login;
-        $user['prenom'] = $prenom;
-        $user['nom'] = $nom;
     }
 }
 ?>
@@ -67,11 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <meta charset="UTF-8">
-    <title>Profil</title>
+    <title>Mon profil</title>
 </head>
 
 <body>
-
     <h1>Mon profil</h1>
 
     <?php if ($errors): ?>
@@ -87,14 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="post" action="">
-        <label>Login : <input type="text" name="login" value="<?= htmlspecialchars($user['login']) ?>"></label><br>
-        <label>Prénom : <input type="text" name="prenom" value="<?= htmlspecialchars($user['prenom']) ?>"></label><br>
-        <label>Nom : <input type="text" name="nom" value="<?= htmlspecialchars($user['nom']) ?>"></label><br>
+        <label>Login : <input type="text" name="login" value="<?= htmlspecialchars($user['login']) ?>" required></label><br>
+        <label>Prénom : <input type="text" name="prenom" value="<?= htmlspecialchars($user['prenom']) ?>" required></label><br>
+        <label>Nom : <input type="text" name="nom" value="<?= htmlspecialchars($user['nom']) ?>" required></label><br>
         <button type="submit">Mettre à jour</button>
     </form>
 
     <p><a href="index.php">Retour à l'accueil</a></p>
-
 </body>
 
 </html>
