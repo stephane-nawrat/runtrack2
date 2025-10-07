@@ -3,14 +3,13 @@
 // FICHIER : inscription.php
 // ===========================
 // Rôle : Permet à un utilisateur de créer un compte
-// Connexion à la BDD via le fichier PDO
+// Connexion à la BDD via PDO
 // ===========================
 
-// Inclusion de la connexion PDO
-require_once __DIR__ . '/config/includes/db.php';
+session_start(); // nécessaire pour utiliser les sessions
+require_once __DIR__ . '/config/includes/db.php'; // chemin correct vers db.php
 
 $errors = [];
-$success = "";
 
 // Vérification de la soumission du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -45,8 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':password' => $hash
         ]);
 
-        // Message utilisateur
-        $success = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
+        // ⚡ Stockage du message de succès en session
+        $_SESSION['success'] = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
+
+        // Redirection vers la page connexion
+        header('Location: connexion.php');
+        exit;
     }
 }
 ?>
@@ -65,16 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Affichage des erreurs -->
     <?php if ($errors): ?>
-        <ul>
+        <ul style="color:red;">
             <?php foreach ($errors as $error): ?>
                 <li><?= htmlspecialchars($error) ?></li>
             <?php endforeach; ?>
         </ul>
-    <?php endif; ?>
-
-    <!-- Message de succès -->
-    <?php if ($success): ?>
-        <p><?= htmlspecialchars($success) ?></p>
     <?php endif; ?>
 
     <!-- Formulaire d'inscription -->
@@ -86,8 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Confirmation : <input type="password" name="password_confirm" required></label><br>
         <button type="submit">S'inscrire</button>
     </form>
-
-    <p><a href="index.php">Retour à l'accueil</a></p>
 
 </body>
 

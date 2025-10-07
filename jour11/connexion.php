@@ -7,10 +7,16 @@
 // ===========================
 
 session_start();
-require_once __DIR__ . '/config/includes/db.php';
-
+require_once __DIR__ . '/config/includes/db.php'; // chemin correct vers db.php
 
 $errors = [];
+$success = "";
+
+// ⚡ Récupération du message de succès depuis la session
+if (!empty($_SESSION['success'])) {
+    $success = $_SESSION['success'];
+    unset($_SESSION['success']); // Supprimer le message après affichage
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = trim($_POST['login']);
@@ -58,6 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <h1>Connexion</h1>
 
+    <!-- Affichage du message de succès après inscription -->
+    <?php if ($success): ?>
+        <p style="color:green;"><?= htmlspecialchars($success) ?></p>
+    <?php endif; ?>
+
+    <!-- Affichage des erreurs -->
     <?php if ($errors): ?>
         <ul style="color:red;">
             <?php foreach ($errors as $error): ?>
@@ -66,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </ul>
     <?php endif; ?>
 
+    <!-- Formulaire de connexion -->
     <form method="post" action="">
         <label>Login : <input type="text" name="login" required></label><br>
         <label>Mot de passe : <input type="password" name="password" required></label><br>
