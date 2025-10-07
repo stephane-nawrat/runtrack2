@@ -29,4 +29,7 @@ return [
 
     // Nom de la base de données
     'db'   => 'ma_base',
+
+    // Encodage des échanges avec MySQL
+    'charset' => 'utf8mb4',
 ];
