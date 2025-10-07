@@ -10,3 +10,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
     nom VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Création de l'utilisateur admin
+INSERT INTO utilisateurs (login, prenom, nom, password)
+VALUES ('admin', 'admin', 'admin', 'admin');
