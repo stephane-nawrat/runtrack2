@@ -28,7 +28,7 @@ return [
     'pass' => 'mon_password',
 
     // Nom de la base de données
-    'db'   => 'ma_base',
+    'dbname'   => 'ma_base',
 
     // Encodage des échanges avec MySQL
     'charset' => 'utf8mb4',
