@@ -28,6 +28,8 @@ $users = $stmt->fetchAll();
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/style.css">
+
     <title>Administration</title>
 </head>
 
